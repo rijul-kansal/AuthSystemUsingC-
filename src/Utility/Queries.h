@@ -8,6 +8,7 @@ namespace Queries
                                           " user_id SERIAL PRIMARY KEY , "              
                                           " user_name VARCHAR(30) NOT NULL , "              
                                           " email VARCHAR(50) NOT NULL UNIQUE , "              
+                                          " is_verified bool DEFAULT false ,"              
                                           " password VARCHAR(100) NOT NULL )";
     
     const std::string INSERT_NEW_USER   = " INSERT INTO Users(user_name,email,password) "
@@ -24,7 +25,7 @@ namespace Queries
                                          " otp_id SERIAL PRIMARY KEY , "
                                          " otp VARCHAR(6) NOT NULL , "
                                          " email VARCHAR(50) NOT NULL UNIQUE, "
-                                         " FOREIGN KEY(email) references Users(email) ) ";
+                                         " FOREIGN KEY(email) references Users(email) ON DELETE CASCADE ) ";
 
     const std::string INSERT_NEW_OTP =   " INSERT INTO OTP(otp,email) "
                                          " Values($1,$2) "

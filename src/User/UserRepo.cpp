@@ -49,52 +49,18 @@ UserDBResult UserRepo::checkUserAvailableInOTPTable(const std::string &email, co
             return UserDBResult(MessageCodes::ERROR_M, "OTP is wrong","",email,"");
         }
         
-
         return UserDBResult(MessageCodes::SUCCESS, "OTP validated","",email,"");
     }
     return UserDBResult(MessageCodes::ERROR_M, mess.getMessage(), "" , "" , "");
 }
 
-UserDBResult UserRepo::addUserToDB(const std::string &username, const std::string &email, const std::string &password)
+UserDBResult UserRepo::crudOperationToDB(const std::string &query, const std::vector<std::string> &data)
 {
-    auto mess = postgresDB->executeCommandWithParams(Queries::INSERT_NEW_USER , {username,email,password});
-
-    if(mess.getMessageCode() == MessageCodes::ERROR_M)
-    {
-        return  UserDBResult(mess.getMessageCode(), mess.getMessage() , username,email,"");
-    }
-    return  UserDBResult(mess.getMessageCode(), "User created successfully",username,email,"");
-}
-
-UserDBResult UserRepo::addOTPToDB(const std::string &email, const std::string &otp)
-{
-    auto mess = postgresDB->executeCommandWithParams(Queries::INSERT_NEW_OTP , {otp,email});
+    auto mess = postgresDB->executeCommandWithParams(query ,data);
     
     if(mess.getMessageCode() == MessageCodes::ERROR_M)
     {
-        return  UserDBResult(mess.getMessageCode(), mess.getMessage() ,"",email,"");
+        return  UserDBResult(mess.getMessageCode(), mess.getMessage() ,"","","");
     }
-    return  UserDBResult(mess.getMessageCode(), "OTP added successfully","",email,"");
-}
-
-UserDBResult UserRepo::deleteOTPFromDB(const std::string &email)
-{
-    auto mess = postgresDB->executeCommandWithParams(Queries::DELETE_OTP_WITH_EMAIL , {email});
-
-    if(mess.getMessageCode() == MessageCodes::ERROR_M)
-    {
-        return  UserDBResult(mess.getMessageCode(), mess.getMessage() ,"",email,"");
-    }
-    return  UserDBResult(mess.getMessageCode(), "OTP deleted successfully","",email,"");
-}
-
-UserDBResult UserRepo::changeLoginPassword(const std::string &email, const std::string &password)
-{
-    auto mess = postgresDB->executeCommandWithParams(Queries::CHANGE_PASSWORD , {email,password});
-
-    if(mess.getMessageCode() == MessageCodes::ERROR_M)
-    {
-        return  UserDBResult(mess.getMessageCode(), mess.getMessage() ,"",email,"");
-    }
-    return  UserDBResult(mess.getMessageCode(), "Password changed successfully","",email,"");
+    return  UserDBResult(mess.getMessageCode(), "Added data successfully","","","");
 }
