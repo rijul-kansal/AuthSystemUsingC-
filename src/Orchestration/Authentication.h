@@ -17,4 +17,5 @@ class Authentication : public IAuthentication
     AuthResult generateOTP(const std::string& email) const override;
     AuthResult validateOTP(const std::string& email, const std::string otp) const override;
     AuthResult changePassword(const std::string& email , const std::string& password) const override;
+    AuthResult isVerifiedTrue(const std::string& email) const override;
 };

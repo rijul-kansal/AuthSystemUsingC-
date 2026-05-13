@@ -10,4 +10,5 @@ class IAuthentication
     virtual AuthResult generateOTP(const std::string& email) const = 0;
     virtual AuthResult validateOTP(const std::string& email, const std::string otp) const = 0;
     virtual AuthResult changePassword(const std::string& email , const std::string& password) const = 0;
+    virtual AuthResult isVerifiedTrue(const std::string& email) const = 0;
 };

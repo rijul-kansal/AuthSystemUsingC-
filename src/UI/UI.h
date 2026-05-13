@@ -14,4 +14,5 @@ class UI
     void askingEmail(std::string& email);
     void askingOTP(std::string& otp);
     void askingPassword(std::string& password);
+    AuthResult otpValidation(const std::string& email);
 };

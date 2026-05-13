@@ -1,5 +1,5 @@
 #include "Authentication.h"
-
+#include "Utility/Messages.h"
 AuthResult Authentication::signup(const std::string &username, const std::string &email, const std::string &password)
 {
     auto res = userController->signup(username,email,password);
@@ -30,7 +30,7 @@ AuthResult Authentication::generateOTP(const std::string &email) const
     {
         return AuthResult(sendOTPTOEmailRes.getMessageCode(), sendOTPTOEmailRes.getMessage(),"",email);
     }
-    return AuthResult(MessageCodes::SUCCESS, "Successfully sent OTP","",email);
+    return AuthResult(MessageCodes::SUCCESS, DefaultMessage::OTPSendSucc,"",email);
 }
 
 AuthResult Authentication::validateOTP(const std::string &email, const std::string otp) const
@@ -44,7 +44,7 @@ AuthResult Authentication::validateOTP(const std::string &email, const std::stri
     
     // delete OTP
     auto deleteOTPRes = userController->deleteOTPToDB(email);
-    return AuthResult(MessageCodes::SUCCESS, "OTP validated successfully","",email);
+    return AuthResult(MessageCodes::SUCCESS,DefaultMessage::OTPValidSucc,"",email);
 }
 
 AuthResult Authentication::changePassword(const std::string &email, const std::string &password) const
@@ -55,5 +55,16 @@ AuthResult Authentication::changePassword(const std::string &email, const std::s
     {
         return AuthResult(res.getMessageCode(),res.getMessage(),"",email);
     }
-    return AuthResult(res.getMessageCode(),"Password changed successfully","",email);
+    return AuthResult(res.getMessageCode(),DefaultMessage::PassChangedSucc,"",email);
+}
+
+AuthResult Authentication::isVerifiedTrue(const std::string &email) const
+{
+    auto res =  userController->isVerifiedTrue(email);
+
+    if(res.getMessageCode() == MessageCodes::ERROR_M)
+    {
+        return AuthResult(res.getMessageCode(),res.getMessage(),"",email);
+    }
+    return AuthResult(res.getMessageCode(),DefaultMessage::VerifySucc,"",email);
 }

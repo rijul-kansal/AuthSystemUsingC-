@@ -1,5 +1,5 @@
 #include "UI.h"
-
+#include "Utility/Messages.h"
 #include <iostream>
 using namespace std;
 void UI::start()
@@ -28,12 +28,32 @@ void UI::start()
             if(res.getMessageCode() == MessageCodes::ERROR_M)
             {
                 cout<<res.getMessage()<<endl;
+                continue;
             }
-            else
+            cout<<"Sign Up successfully,Please verify now"<<endl;
+            cout<<""<<endl;
+            auto genOTPRes = auth->generateOTP(email);
+
+            if(genOTPRes.getMessageCode() == MessageCodes::ERROR_M)
             {
-                cout<<"Sign Up successfully, Please Login now"<<endl;
-                cout<<""<<endl;
+                cout<<genOTPRes.getMessage()<<endl;
+                continue;
+            } 
+            
+            auto validateOTPRes = otpValidation(email);
+            if(validateOTPRes.getMessageCode() == MessageCodes::ERROR_M)
+            {
+                cout<<validateOTPRes.getMessage()<<endl;
+                continue;
             }
+
+            auto verifiedRes = auth->isVerifiedTrue(email);
+            if(verifiedRes.getMessageCode() == MessageCodes::ERROR_M)
+            {
+                cout<<validateOTPRes.getMessage()<<endl;
+                continue;
+            }
+            cout<<"OTP validated successfully"<<endl;
         }
         else if(n==2)
         {
@@ -79,12 +99,11 @@ void UI::start()
                 {
                     std::string otp;
                     askingOTP(otp);
-                    std::cout<<"OTP "<<otp<<std::endl;
-                    auto validateOTPRes = auth->validateOTP(email,otp);
-
+                    
+                    auto validateOTPRes = otpValidation(email);
                     if(validateOTPRes.getMessageCode() == MessageCodes::ERROR_M)
                     {
-                        cout<<"Error "<<validateOTPRes.getMessage()<<endl;
+                        cout<<validateOTPRes.getMessage()<<endl;
                         cout<<endl;
                     }
                     else
@@ -268,5 +287,24 @@ void UI::askingPassword(std::string &password)
         }
 
         return;
+    }
+}
+
+AuthResult UI::otpValidation(const std::string& email)
+{
+    while(true)
+    {
+        std::string otp;
+        askingOTP(otp);
+        auto res = auth->validateOTP(email,otp);
+        if(res.getMessageCode() == MessageCodes::ERROR_M)
+        {
+            if(res.getMessage() == DefaultMessage::OTPWrong)
+            {
+                cout<<"Wrong OTP enter again"<<endl;
+                continue;
+            }
+        }
+        return res;
     }
 }

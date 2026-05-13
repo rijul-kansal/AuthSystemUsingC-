@@ -23,4 +23,5 @@ class UserController: public IUserController
     UserDBResult addOTPToDB(const std::string &email, const std::string &otp) override;
     UserDBResult deleteOTPToDB(const std::string &email) override;
     UserDBResult changePassword(const std::string& email , const std::string& password) const override;
+    UserDBResult isVerifiedTrue(const std::string& email ) const override;
 };

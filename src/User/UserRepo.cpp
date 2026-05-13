@@ -1,5 +1,6 @@
 #include "UserRepo.h"
 #include "Utility/Queries.h"
+#include "Utility/Messages.h"
 UserRepo::UserRepo(std::shared_ptr<IPostgresDB> postgresDB) : postgresDB(postgresDB)
 {
 
@@ -46,7 +47,7 @@ UserDBResult UserRepo::checkUserAvailableInOTPTable(const std::string &email, co
 
         if(rows == 0)
         {
-            return UserDBResult(MessageCodes::ERROR_M, "OTP is wrong","",email,"");
+            return UserDBResult(MessageCodes::ERROR_M, DefaultMessage::OTPWrong,"",email,"");
         }
         
         return UserDBResult(MessageCodes::SUCCESS, "OTP validated","",email,"");

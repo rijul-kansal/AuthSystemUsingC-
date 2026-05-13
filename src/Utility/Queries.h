@@ -20,7 +20,9 @@ namespace Queries
     const std::string CHANGE_PASSWORD   = " UPDATE Users "
                                           " Set password = $2 "
                                           " where email = $1 ";
-
+    const std::string MAKE_IS_VERIFIED_TRUE = " UPDATE Users "
+                                              " set is_verified = true "  
+                                              " where email = $1 ";  
     const std::string CREATE_OTP_TABLE = " CREATE TABLE IF NOT EXISTS OTP( "
                                          " otp_id SERIAL PRIMARY KEY , "
                                          " otp VARCHAR(6) NOT NULL , "

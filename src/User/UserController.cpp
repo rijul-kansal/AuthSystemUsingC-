@@ -89,3 +89,13 @@ UserDBResult UserController::changePassword(const std::string &email, const std:
     }
     return UserDBResult(res.getMessageCode(), DefaultMessage::OTPDelSucc,"",email,"");
 }
+
+UserDBResult UserController::isVerifiedTrue(const std::string &email) const
+{
+    auto res=  userWriteQuery->crudOperationToDB(Queries::MAKE_IS_VERIFIED_TRUE,{email});
+    if(res.getMessageCode() == MessageCodes::ERROR_M)
+    {
+        return res;
+    }
+    return UserDBResult(res.getMessageCode(), DefaultMessage::VerifySucc,"",email,"");
+}
