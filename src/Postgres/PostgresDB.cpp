@@ -7,7 +7,7 @@ PostgresDB::PostgresDB() : conn(nullptr,PQfinish)
 
 PostgresDBResult PostgresDB::makeConnection()
 {
-    auto port = std::getenv("PORT");
+    const char* port = std::getenv("PORT");
     conn  = PGconnPtr(PQsetdbLogin(
         "localhost",
         port,

@@ -14,6 +14,7 @@ void UI::start()
         
         int n ;
         cin>>n;
+        cout<<endl;
 
         if(n==1)
         {
@@ -108,7 +109,6 @@ void UI::start()
             {
                 continue;
             }
-            
         }
         else
         {
@@ -125,14 +125,14 @@ void UI::askingSignUpDetails(std::string &username, std::string &email, std::str
 
         if(username.empty())
         {
-            cout<<"Username ";
+            cout<<"Username: ";
             cin>>username;
             cout<<endl;
         }    
         
         if(email.empty())
         {
-            cout<<"email ";
+            cout<<"email: ";
             cin>>email;
             cout<<endl;
         }
@@ -141,7 +141,7 @@ void UI::askingSignUpDetails(std::string &username, std::string &email, std::str
         {
             cout<<"Password should be of length min 6 char with atleast 1 UpperCase 1 Lowercase ";
             cout<<" 1 Digit and 1 special char should be there "<<endl;
-            cout<<"password ";
+            cout<<"password: ";
             cin>>password;
             cout<<endl;
         }

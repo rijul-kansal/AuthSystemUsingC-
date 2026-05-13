@@ -17,8 +17,8 @@ namespace Queries
                                           " where email = $1";
                                           
     const std::string CHANGE_PASSWORD   = " UPDATE Users "
-                                          " Set password = $1 "
-                                          " where email = $2 ";
+                                          " Set password = $2 "
+                                          " where email = $1 ";
 
     const std::string CREATE_OTP_TABLE = " CREATE TABLE IF NOT EXISTS OTP( "
                                          " otp_id SERIAL PRIMARY KEY , "

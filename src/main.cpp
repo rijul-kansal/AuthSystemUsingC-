@@ -73,7 +73,7 @@ void loadEnv(const std::string& file) {
     while (std::getline(f, line)) {
         auto pos = line.find('=');
         if (pos == std::string::npos) continue;
-
+        
         std::string key = line.substr(0, pos);
         std::string value = line.substr(pos + 1);
         _putenv_s(key.c_str(), value.c_str());
@@ -82,7 +82,7 @@ void loadEnv(const std::string& file) {
 int main()
 {
     // Load env
-    loadEnv("C:/Users/Rijul Kansal/OneDrive/Desktop/Auth System/.env");
+    loadEnv("C:/Users/Rijul Kansal/OneDrive/Desktop/Projects/AuthSystem/.env");
     std::shared_ptr<IPostgresDB> postgresDB = std::make_shared<PostgresDB>();
 
     auto makeConnRes = postgresDB->makeConnection();
