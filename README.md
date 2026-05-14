@@ -26,13 +26,13 @@ cmake --build --preset x64-debug
 ## FLOW
 
 ```mermaid
+flowchart TD
 
     A([Start]) --> B{Choose Option}
 
     B -->|Sign Up| C[Enter Username, Email, Password]
     B -->|Login| L{Choose Login Option}
 
-    %% SIGNUP FLOW
     C --> D[Send OTP to Email]
     D --> E{OTP Correct?}
 
@@ -40,11 +40,9 @@ cmake --build --preset x64-debug
     E -->|Yes| F[User Verified]
     F --> G[Redirect to Login Page]
 
-    %% LOGIN MENU
     L -->|Login| M[Enter Email and Password]
     L -->|Forgot Password| FP1[Enter Email Address]
 
-    %% NORMAL LOGIN
     M --> N{Password Correct?}
 
     N -->|No| O[Show Invalid Credentials]
@@ -59,7 +57,6 @@ cmake --build --preset x64-debug
     S -->|Yes| T[User Verified]
     T --> Q
 
-    %% FORGOT PASSWORD FLOW
     FP1 --> FP2[Send OTP to Email]
     FP2 --> FP3{OTP Correct?}
 
