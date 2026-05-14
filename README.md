@@ -24,8 +24,8 @@ cmake --build --preset x64-debug
 - vcpkg
 
 ## FLOW
-                         ```mermaid
-flowchart TD
+
+```mermaid
 
     A([Start]) --> B{Choose Option}
 
