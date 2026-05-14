@@ -2,7 +2,8 @@
 #include "Utility/Queries.h"
 #include "Utility/Messages.h"
 #include <iostream>
-UserRepo::UserRepo(std::shared_ptr<IPostgresDB> postgresDB) : postgresDB(postgresDB)
+UserRepo::UserRepo(std::shared_ptr<IPostgresDB> postgresDB , std::shared_ptr<ITime> time) 
+    : postgresDB(postgresDB), time(time)
 {
 
 }
@@ -43,7 +44,7 @@ UserDBResult UserRepo::checkUserAvailable(const std::string& email)
     return UserDBResult(MessageCodes::ERROR_M, mess.getMessage(), "" , "" , "");
 }
 
-UserDBResult UserRepo::checkUserAvailableInOTPTable(const std::string &email, const std::string &otp, long long time)
+UserDBResult UserRepo::checkUserAvailableInOTPTable(const std::string &email, const std::string &otp)
 {
     auto mess = postgresDB->executeCommandWithParams(Queries::CHECK_USER_OTP_IN_OTP_TABLE , {email,otp});
 
@@ -64,8 +65,8 @@ UserDBResult UserRepo::checkUserAvailableInOTPTable(const std::string &email, co
         }
 
         long long timestampVal  = std::stol(PQgetvalue(resPtr.get(), 0, timestampCol));
-        std::cout<<timestampVal <<" "<<time<<std::endl;
-        if(timestampVal+300 < time)
+        long long timeL = time->addTime(300);
+        if(timeL - timestampVal > 400 )
         {
             return UserDBResult(MessageCodes::ERROR_M, DefaultMessage::OTPTimExceed,"",email,"");
         }

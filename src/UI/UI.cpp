@@ -318,10 +318,9 @@ AuthResult UI::otpValidation(const std::string& email) const
 {
     while(true)
     {
-        long long time = auth->getTime();
         std::string otp;
         askingOTP(otp);
-        auto res = auth->validateOTP(email,otp,time);
+        auto res = auth->validateOTP(email,otp);
         if(res.getMessageCode() == MessageCodes::ERROR_M)
         {
             if(res.getMessage() == DefaultMessage::OTPWrong)

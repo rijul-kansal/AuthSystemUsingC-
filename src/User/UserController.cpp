@@ -48,9 +48,9 @@ UserDBResult UserController::login(const std::string& email, const std::string& 
     }
 }
 
-UserDBResult UserController::validateOTP(const std::string &email, const std::string &otp, long long time) const
+UserDBResult UserController::validateOTP(const std::string &email, const std::string &otp) const
 {
-    return userReadQuery->checkUserAvailableInOTPTable(email,otp,time);
+    return userReadQuery->checkUserAvailableInOTPTable(email,otp);
 }
 
 UserDBResult UserController::addOTPToDB(const std::string &email, const std::string &otp)

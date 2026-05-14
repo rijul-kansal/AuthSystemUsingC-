@@ -102,9 +102,10 @@ int main()
     std::unique_ptr<IPasswordValidator> passValidator = std::make_unique<PasswordValidator>();
     // Hash
     std::unique_ptr<IHash> hash = std::make_unique<Hash>();
-
+     // Time
+    std::shared_ptr<ITime> time = std::make_shared<Time>();
     // User
-    auto userRepo = std::make_shared<UserRepo>(postgresDB);
+    auto userRepo = std::make_shared<UserRepo>(postgresDB,time);
     std::shared_ptr<IUserReadQuery> userReadQuery = userRepo;
     std::shared_ptr<IUserWriteQuery> userWriteQuery = userRepo;
     std::shared_ptr<IUserController> userController = std::make_shared<UserController>(
@@ -123,12 +124,10 @@ int main()
     // OTP Service
     std::unique_ptr<IOTPService> otpService = std::make_unique<OTPService>(curlApi,randomNumGen,emailTemplate);
     
-    // Time
-    std::shared_ptr<ITime> time = std::make_shared<Time>();
+   
     // Orchestration
     std::unique_ptr<IAuthentication> auth = std::make_unique<Authentication>(userController , 
-                                                                            std::move(otpService), 
-                                                                            time);
+                                                                            std::move(otpService));
 
     // UI
     auto ui = std::make_unique<UI>(std::move(auth));

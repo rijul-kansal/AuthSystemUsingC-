@@ -33,9 +33,9 @@ AuthResult Authentication::generateOTP(const std::string &email) const
     return AuthResult(MessageCodes::SUCCESS, DefaultMessage::OTPSendSucc,"",email);
 }
 
-AuthResult Authentication::validateOTP(const std::string &email, const std::string otp,long long time) const
+AuthResult Authentication::validateOTP(const std::string &email, const std::string otp) const
 {
-    auto validateOTPRes = userController->validateOTP(email,otp,time);
+    auto validateOTPRes = userController->validateOTP(email,otp);
 
     if(validateOTPRes.getMessageCode() == MessageCodes::ERROR_M)
     {
@@ -67,9 +67,4 @@ AuthResult Authentication::isVerifiedTrue(const std::string &email) const
         return AuthResult(res.getMessageCode(),res.getMessage(),"",email);
     }
     return AuthResult(res.getMessageCode(),DefaultMessage::VerifySucc,"",email);
-}
-
-long long Authentication::getTime() const
-{
-    return time->addTime(330);
 }
