@@ -1,6 +1,7 @@
 #include "UserRepo.h"
 #include "Utility/Queries.h"
 #include "Utility/Messages.h"
+#include <iostream>
 UserRepo::UserRepo(std::shared_ptr<IPostgresDB> postgresDB) : postgresDB(postgresDB)
 {
 
@@ -23,6 +24,7 @@ UserDBResult UserRepo::checkUserAvailable(const std::string& email)
         int userNameCol = PQfnumber(resPtr.get(), "user_name");
         int passwordCol = PQfnumber(resPtr.get(), "password");
         int isVerifiedCol = PQfnumber(resPtr.get(), "is_verified");
+
         if (emailCol == -1 || userNameCol == -1 || passwordCol == -1 || isVerifiedCol == -1) 
         {
             return UserDBResult(MessageCodes::ERROR_M, DefaultMessage::ColNotFound, "" , "","");
@@ -41,7 +43,7 @@ UserDBResult UserRepo::checkUserAvailable(const std::string& email)
     return UserDBResult(MessageCodes::ERROR_M, mess.getMessage(), "" , "" , "");
 }
 
-UserDBResult UserRepo::checkUserAvailableInOTPTable(const std::string &email, const std::string &otp)
+UserDBResult UserRepo::checkUserAvailableInOTPTable(const std::string &email, const std::string &otp, long long time)
 {
     auto mess = postgresDB->executeCommandWithParams(Queries::CHECK_USER_OTP_IN_OTP_TABLE , {email,otp});
 
@@ -53,8 +55,20 @@ UserDBResult UserRepo::checkUserAvailableInOTPTable(const std::string &email, co
         if(rows == 0)
         {
             return UserDBResult(MessageCodes::ERROR_M, DefaultMessage::OTPWrong,"",email,"");
+        }   
+        int timestampCol = PQfnumber(resPtr.get(), "otp_validity");
+
+        if (timestampCol == -1) 
+        {
+            return UserDBResult(MessageCodes::ERROR_M, DefaultMessage::ColNotFound, "" , "","");
         }
-        
+
+        long long timestampVal  = std::stol(PQgetvalue(resPtr.get(), 0, timestampCol));
+        std::cout<<timestampVal <<" "<<time<<std::endl;
+        if(timestampVal+300 < time)
+        {
+            return UserDBResult(MessageCodes::ERROR_M, DefaultMessage::OTPTimExceed,"",email,"");
+        }
         return UserDBResult(MessageCodes::SUCCESS, "OTP validated","",email,"");
     }
     return UserDBResult(MessageCodes::ERROR_M, mess.getMessage(), "" , "" , "");

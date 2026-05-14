@@ -12,7 +12,7 @@ class UI
     void askingSignUpDetails(std::string& username,std::string& email,std::string& password);
     void askingLoginDetails(std::string& email,std::string& password);
     void askingEmail(std::string& email);
-    void askingOTP(std::string& otp);
+    void askingOTP(std::string& otp) const;
     void askingPassword(std::string& password);
-    AuthResult otpValidation(const std::string& email);
+    AuthResult otpValidation(const std::string& email) const;
 };

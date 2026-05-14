@@ -2,7 +2,7 @@
 #include <nlohmann/json.hpp>
 #include <cstdlib>
 #include <memory>
-
+#include "Utility/Messages.h"
 
 using CURLPtr = std::unique_ptr<CURL, decltype(&curl_easy_cleanup)>; 
 using HeaderPtr = std::unique_ptr<curl_slist, decltype(&curl_slist_free_all)>;
@@ -27,7 +27,7 @@ APIResult API::emailApi(const std::string& jsonData) const
 
     if (!curl)
     {
-        return APIResult(MessageCodes::ERROR_M, "API:EmailAPI :: Contact support");
+        return APIResult(MessageCodes::ERROR_M, DefaultMessage::NoCurl);
     }
     HeaderPtr headers(nullptr, curl_slist_free_all);
 

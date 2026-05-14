@@ -124,9 +124,6 @@ void UI::start()
                 }
                 else
                 {
-                    std::string otp;
-                    askingOTP(otp);
-                    
                     auto validateOTPRes = otpValidation(email);
                     if(validateOTPRes.getMessageCode() == MessageCodes::ERROR_M)
                     {
@@ -271,7 +268,7 @@ void UI::askingEmail(std::string &email)
     }
 }
 
-void UI::askingOTP(std::string &otp)
+void UI::askingOTP(std::string &otp) const
 {
     cout<<"Please enter 6 digit otp send to your email address"<<endl;
     while(true)
@@ -317,13 +314,14 @@ void UI::askingPassword(std::string &password)
     }
 }
 
-AuthResult UI::otpValidation(const std::string& email)
+AuthResult UI::otpValidation(const std::string& email) const 
 {
     while(true)
     {
+        long long time = auth->getTime();
         std::string otp;
         askingOTP(otp);
-        auto res = auth->validateOTP(email,otp);
+        auto res = auth->validateOTP(email,otp,time);
         if(res.getMessageCode() == MessageCodes::ERROR_M)
         {
             if(res.getMessage() == DefaultMessage::OTPWrong)

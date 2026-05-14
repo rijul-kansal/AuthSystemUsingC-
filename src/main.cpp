@@ -24,9 +24,11 @@
 #include "TemplateService/IEmailTemplate.h"
 #include "TemplateService/EmailTemplate.h"
 
-
 #include "OTPService/IOTPService.h"
 #include "OTPService/OTPService.h"
+
+#include "Time/ITime.h"
+#include "Time/Time.h"
 
 #include "Orchestration/Authentication.h"
 #include "Orchestration/IAuthentication.h"
@@ -120,10 +122,13 @@ int main()
     std::shared_ptr<IEmailTemplate> emailTemplate = std::make_shared<EmailTemplate>();
     // OTP Service
     std::unique_ptr<IOTPService> otpService = std::make_unique<OTPService>(curlApi,randomNumGen,emailTemplate);
-
+    
+    // Time
+    std::shared_ptr<ITime> time = std::make_shared<Time>();
     // Orchestration
     std::unique_ptr<IAuthentication> auth = std::make_unique<Authentication>(userController , 
-                                                                            std::move(otpService));
+                                                                            std::move(otpService), 
+                                                                            time);
 
     // UI
     auto ui = std::make_unique<UI>(std::move(auth));

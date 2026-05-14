@@ -10,6 +10,6 @@ class UserRepo : public IUserWriteQuery , public IUserReadQuery
     public:
     UserRepo(std::shared_ptr<IPostgresDB> postgresDB);
     UserDBResult checkUserAvailable(const std::string& email) override ; 
-    UserDBResult checkUserAvailableInOTPTable(const std::string& email,const std::string &otp) override ;
+    UserDBResult checkUserAvailableInOTPTable(const std::string& email,const std::string &otp, long long time) override ;
     UserDBResult crudOperationToDB(const std::string& query, const std::vector<std::string>& data) override ;
 };

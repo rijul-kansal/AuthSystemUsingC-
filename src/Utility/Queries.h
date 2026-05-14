@@ -32,11 +32,12 @@ namespace Queries
     const std::string INSERT_NEW_OTP =   " INSERT INTO OTP(otp,email) "
                                          " Values($1,$2) "
                                          " On Conflict (email) Do UPDATE "
-                                         " SET otp = $1 ";
+                                         " SET otp = $1 , "
+                                         " otp_validity = (EXTRACT(EPOCH FROM NOW())::BIGINT) ";
     
     const std::string DELETE_OTP_WITH_EMAIL =  " DELETE FROM OTP "
                                                " WHERE email = 1$ ";
 
-    const std::string CHECK_USER_OTP_IN_OTP_TABLE = " Select email from OTP "
+    const std::string CHECK_USER_OTP_IN_OTP_TABLE = " Select email,otp_validity from OTP "
                                                     " where email = $1 AND otp = $2";
 };

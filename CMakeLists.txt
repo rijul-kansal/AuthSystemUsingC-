@@ -19,6 +19,7 @@ add_executable(AuthSystem
     src/Hash/Hash.cpp
     src/User/UserRepo.cpp
     src/User/UserController.cpp
+    src/Time/Time.cpp
     src/Orchestration/Authentication.cpp
     src/UI/UI.cpp
     src/main.cpp

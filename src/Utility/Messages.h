@@ -3,6 +3,8 @@
 #include <string>
 namespace DefaultMessage
 {
+    const std::string NoCurl = "API:EmailAPI :: Contact support";
+
     const std::string connectionSuccess = "Connection established";
     const std::string connectionObjNull = "Connection object is null";
     const std::string connectionObjEmpty = "Connection is Empty , Please connect to DB again";
@@ -25,6 +27,7 @@ namespace DefaultMessage
     const std::string OTPSendSucc = "OTP send successfully";
     const std::string OTPAddSucc = "OTP added successfully";
     const std::string OTPValidSucc = "OTP validated successfully";
+    const std::string OTPTimExceed = "OTP time Exceed";
     const std::string OTPWrong = "OTP is wrong";
     
     const std::string VerifySucc = "Verification of email successfully";
