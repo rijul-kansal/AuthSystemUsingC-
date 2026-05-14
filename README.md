@@ -24,121 +24,52 @@ cmake --build --preset x64-debug
 - vcpkg
 
 ## FLOW
-                           ┌──────────────┐
-                           │    Start     │
-                           └──────┬───────┘
-                                  │
-                                  ▼
-                    ┌─────────────────────────────────┐
-                    │ Please enter one option below   │
-                    │ 1 for SignUp                    │
-                    │ 2 for Login                     │
-                    └──────────────┬──────────────────┘
-                                   │
-                 ┌─────────────────┴─────────────────┐
-                 │                                   │
-                 ▼                                   ▼
-        ┌──────────────────┐              ┌──────────────────┐
-        │      Signup      │              │      Login       │
-        └────────┬─────────┘              └────────┬─────────┘
-                 │                                 │
-                 ▼                                 ▼
-      ┌─────────────────────┐        ┌─────────────────────────┐
-      │ Enter Username      │        │ Press 1 for Login       │
-      │ Enter Email         │        │ Press 2 Forgot Password │
-      │ Enter Password      │        │ Press 3 Go Back         │
-      └─────────┬───────────┘        └──────────┬──────────────┘
-                │                          │
-                ▼                          │
-      ┌─────────────────────┐              │
-      │ Validate Password   │              │
-      │ - Uppercase         │              │
-      │ - Lowercase         │              │
-      │ - Digit             │              │
-      │ - Special Character │              │
-      │ - Minimum Length    │              │
-      └─────────┬───────────┘              │
-                │                          │
-                ▼                          │
-      ┌─────────────────────┐              │
-      │ Signup Successful   │              │
-      │ Redirect to Login   │              │
-      └─────────┬───────────┘              │
-                │                          │
-                └──────────────┐           │
-                               ▼           ▼
-                 ┌────────────────────────────┐
-                 │ Enter Email and Password   │
-                 └────────────┬───────────────┘
-                              │
-                              ▼
-                    ┌──────────────────────┐
-                    │ Password Correct ?   │
-                    └──────────┬───────────┘
-                               │
-                 ┌─────────────┴─────────────┐
-                 │                           │
-                 ▼                           ▼
-       ┌──────────────────┐      ┌──────────────────────┐
-       │ Login Successful │      │ Password Incorrect   │
-       └──────────────────┘      └──────────┬───────────┘
-                                            │
-                                            ▼
-                                 ┌─────────────────────────┐
-                                 │ Forgot Password Flow    │
-                                 └──────────┬──────────────┘
-                                            │
-                                            ▼
-                                 ┌─────────────────────────┐
-                                 │ Enter Registered Email  │
-                                 └──────────┬──────────────┘
-                                            │
-                                            ▼
-                                 ┌─────────────────────────┐
-                                 │ Generate 6 Digit OTP    │
-                                 │ Send OTP via Email      │
-                                 └──────────┬──────────────┘
-                                            │
-                                            ▼
-                                 ┌─────────────────────────┐
-                                 │ Enter OTP               │
-                                 └──────────┬──────────────┘
-                                            │
-                                            ▼
-                                 ┌─────────────────────────┐
-                                 │ OTP Valid ?             │
-                                 └──────────┬──────────────┘
-                                            │
-                             ┌──────────────┴──────────────┐
-                             │                             │
-                             ▼                             ▼
-               ┌────────────────────┐      ┌──────────────────┐
-               │ Enter New Password │      │ Invalid OTP      │
-               └─────────┬──────────┘      └──────────────────┘
-                         │
-                         ▼
-               ┌────────────────────┐
-               │ Update Password    │
-               └─────────┬──────────┘
-                         │
-                         ▼
-               ┌────────────────────┐
-               │ Password Changed   │
-               │ Successfully       │
-               └─────────┬──────────┘
-                         │
-                         ▼
-               ┌────────────────────┐
-               │ Redirect to Login  │
-               └─────────┬──────────┘
-                         │
-                         ▼
-               ┌────────────────────┐
-               │ Login with New     │
-               │ Password           │
-               └─────────┬──────────┘
-                         │
-                         ▼
-               ┌────────────────────┐
-               │ Login Successful   │
-               └────────────────────┘
+                         ```mermaid
+flowchart TD
+
+    A([Start]) --> B{Choose Option}
+
+    B -->|Sign Up| C[Enter Username, Email, Password]
+    B -->|Login| L{Choose Login Option}
+
+    %% SIGNUP FLOW
+    C --> D[Send OTP to Email]
+    D --> E{OTP Correct?}
+
+    E -->|No| D
+    E -->|Yes| F[User Verified]
+    F --> G[Redirect to Login Page]
+
+    %% LOGIN MENU
+    L -->|Login| M[Enter Email and Password]
+    L -->|Forgot Password| FP1[Enter Email Address]
+
+    %% NORMAL LOGIN
+    M --> N{Password Correct?}
+
+    N -->|No| O[Show Invalid Credentials]
+    N -->|Yes| P{User Verified?}
+
+    P -->|Yes| Q[Login Successful]
+
+    P -->|No| R[Send OTP to Email]
+    R --> S{OTP Correct?}
+
+    S -->|No| R
+    S -->|Yes| T[User Verified]
+    T --> Q
+
+    %% FORGOT PASSWORD FLOW
+    FP1 --> FP2[Send OTP to Email]
+    FP2 --> FP3{OTP Correct?}
+
+    FP3 -->|No| FP2
+    FP3 -->|Yes| FP4[Enter New Password]
+
+    FP4 --> FP5[Password Updated Successfully]
+    FP5 --> FP6[Redirect to Login Page]
+
+    Q --> Z([End])
+    G --> Z
+    FP6 --> Z
+```
