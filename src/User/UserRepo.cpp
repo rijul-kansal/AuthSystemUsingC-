@@ -22,16 +22,21 @@ UserDBResult UserRepo::checkUserAvailable(const std::string& email)
         int emailCol = PQfnumber(resPtr.get(), "email");
         int userNameCol = PQfnumber(resPtr.get(), "user_name");
         int passwordCol = PQfnumber(resPtr.get(), "password");
-        
-        if (emailCol == -1 || userNameCol == -1 || passwordCol == -1) 
+        int isVerifiedCol = PQfnumber(resPtr.get(), "is_verified");
+        if (emailCol == -1 || userNameCol == -1 || passwordCol == -1 || isVerifiedCol == -1) 
         {
-            return UserDBResult(MessageCodes::ERROR_M, "Column not found", "" , "","");
+            return UserDBResult(MessageCodes::ERROR_M, DefaultMessage::ColNotFound, "" , "","");
         }
 
         std::string userName   = PQgetvalue(resPtr.get(), 0, userNameCol);
         std::string email  = PQgetvalue(resPtr.get(), 0, emailCol);
         std::string hashedPass  = PQgetvalue(resPtr.get(), 0, passwordCol);
-        return UserDBResult(MessageCodes::SUCCESS, "User found",userName,email,hashedPass);
+        std::string isVerified  = PQgetvalue(resPtr.get(), 0, isVerifiedCol);
+        if(isVerified == "f")
+        {
+            return UserDBResult(MessageCodes::ERROR_M, DefaultMessage::userNotVerified,"",email,"");
+        }
+        return UserDBResult(MessageCodes::SUCCESS, DefaultMessage::userFound,userName,email,hashedPass);
     }
     return UserDBResult(MessageCodes::ERROR_M, mess.getMessage(), "" , "" , "");
 }

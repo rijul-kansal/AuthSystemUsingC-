@@ -9,6 +9,7 @@ namespace DefaultMessage
     
     const std::string QueryStrEmpty = "Query string is empty";
     const std::string QueryExec = "Query executed successfully";
+    const std::string ColNotFound = "Column not found";
     const std::string NoRes = "No Result Contact support";
     
     const std::string PasswordCretNotMet = "Password not meet the criteria";
@@ -16,6 +17,8 @@ namespace DefaultMessage
     const std::string PassChangedSucc = "Password changed successfully";
     
     const std::string userAddedSucc = "User successfully registered";
+    const std::string userFound = "User found";
+    const std::string userNotVerified = "User is not verified";
     const std::string LoginSucc = "Login successfully";
     
     const std::string OTPDelSucc = "OTP deleted successfully";

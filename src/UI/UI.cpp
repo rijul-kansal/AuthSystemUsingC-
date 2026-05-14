@@ -76,7 +76,34 @@ void UI::start()
 
                 if(res.getMessageCode() == MessageCodes::ERROR_M)
                 {
-                    cout<<res.getMessage()<<endl;
+                    if(res.getMessage() == DefaultMessage::userNotVerified)
+                    {
+                        cout<<"First you need to verify your email"<<endl;
+                        auto genOTPRes = auth->generateOTP(email);
+                        if(genOTPRes.getMessageCode() == MessageCodes::ERROR_M)
+                        {
+                            cout<<genOTPRes.getMessage()<<endl;
+                            continue;
+                        } 
+                        
+                        auto validateOTPRes = otpValidation(email);
+                        if(validateOTPRes.getMessageCode() == MessageCodes::ERROR_M)
+                        {
+                            cout<<validateOTPRes.getMessage()<<endl;
+                            continue;
+                        }
+                         auto verifiedRes = auth->isVerifiedTrue(email);
+                        if(verifiedRes.getMessageCode() == MessageCodes::ERROR_M)
+                        {
+                            cout<<validateOTPRes.getMessage()<<endl;
+                            continue;
+                        }
+                        cout<<"OTP validated successfully"<<endl;
+                    }
+                    else
+                    {
+                        cout <<res.getMessage()<<endl;
+                    }
                 }
                 else
                 {

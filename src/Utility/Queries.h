@@ -1,5 +1,4 @@
-#ifndef QUERIES_H
-#define QUERIES_H
+#pragma once
 
 #include <string>
 namespace Queries
@@ -14,7 +13,7 @@ namespace Queries
     const std::string INSERT_NEW_USER   = " INSERT INTO Users(user_name,email,password) "
                                           " Values($1,$2,$3)";
 
-    const std::string CHECK_USER        = " SELECT user_name, email , password FROM Users "
+    const std::string CHECK_USER        = " SELECT user_name, email , password , is_verified FROM Users "
                                           " where email = $1";
                                           
     const std::string CHANGE_PASSWORD   = " UPDATE Users "
@@ -26,6 +25,7 @@ namespace Queries
     const std::string CREATE_OTP_TABLE = " CREATE TABLE IF NOT EXISTS OTP( "
                                          " otp_id SERIAL PRIMARY KEY , "
                                          " otp VARCHAR(6) NOT NULL , "
+                                         " otp_validity BIGINT NOT NULL DEFAULT (EXTRACT(EPOCH FROM NOW())::BIGINT) , "
                                          " email VARCHAR(50) NOT NULL UNIQUE, "
                                          " FOREIGN KEY(email) references Users(email) ON DELETE CASCADE ) ";
 
@@ -39,5 +39,4 @@ namespace Queries
 
     const std::string CHECK_USER_OTP_IN_OTP_TABLE = " Select email from OTP "
                                                     " where email = $1 AND otp = $2";
-}
-#endif
+};
